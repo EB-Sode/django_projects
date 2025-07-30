@@ -1,13 +1,19 @@
 from django.shortcuts import render
 from .models import Product, Book
-# Create your views here.
 from django.http import HttpResponse
-def index(request): return HttpResponse("Welcome to my book store.")
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
 
+# Create your views here.
 '''This code is for a Django application that manages a book store. 
 It includes views for creating, deleting, updating, and viewing products (books) in the store. 
 The models define the structure of the data, and the views handle HTTP requests to perform operations on the data.
 '''
+
+
+def index(request): return HttpResponse("Welcome to my book store.")
+
 #create products
 def create_product(request):
     new_product = Product(name="Dettol", description="Bathing antiseptic soap", price="20.56", category= "Toiletry")
@@ -75,3 +81,8 @@ many_books = [
 def books_add_many(request):
     books_add_many = Book.objects.bulk_create(many_books)
     return HttpResponse("Many books added successfully.")
+
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy("login")
+    template_name = "registration/signup.html"
